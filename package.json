@@ -1,18 +1,33 @@
 {
-  "name": "City Explore",
+  "name": "city-explore",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@emotion/react": "^11.4.1",
+    "@emotion/styled": "^11.3.0",
+    "@fortawesome/fontawesome-svg-core": "^1.2.36",
+    "@fortawesome/free-solid-svg-icons": "^5.15.4",
+    "@fortawesome/react-fontawesome": "^0.1.15",
+    "@mapbox/mapbox-gl-geocoder": "^4.7.4",
+    "@mui/icons-material": "^5.0.1",
+    "@mui/material": "^5.0.1",
+    "@mui/styled-engine-sc": "^5.0.0",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
     "@types/jest": "^26.0.15",
+    "@types/mapbox__mapbox-gl-geocoder": "^4.7.1",
     "@types/node": "^12.0.0",
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
+    "@types/react-fontawesome": "^1.6.5",
+    "axios": "^0.21.4",
+    "node-sass": "^6.0.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
+    "react-fontawesome": "^1.7.1",
     "react-scripts": "4.0.3",
+    "styled-components": "^5.3.1",
     "typescript": "^4.1.2",
     "web-vitals": "^1.0.1"
   },
@@ -39,5 +54,11 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@types/styled-components": "^5.1.14",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "prettier": "^2.4.1"
   }
 }
