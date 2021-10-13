@@ -23,7 +23,7 @@ const App = (): JSX.Element => {
                             <Banner />
                             <Title variant="h1">{locationName}</Title>
                             <Weather location={location} />
-                            <Map />
+                            <Map location={location} />
                         </CityCard>
                     </Container>
                     <Container>
