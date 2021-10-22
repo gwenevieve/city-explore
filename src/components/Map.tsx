@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { Container } from '@mui/material';
 
 import { Coordinates } from '../models/coordinates';
-import { PlacesFields } from '../models/placesOfInterest';
+import { Features } from '../models/placesOfInterest';
 
 import { GetPlacesOfInterest } from '../queries/Mapbox';
 
@@ -13,14 +13,28 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 
 const LocationMap = ({ location }: { location: Coordinates | undefined }): JSX.Element => {
     mapboxgl.accessToken = `${process.env.REACT_APP_MAPBOX}`;
-    const [placeData, setPlaceData] = React.useState<PlacesFields>();
+    const [placeData, setPlaceData] = React.useState<Features[]>();
     const mapDiv = React.useRef<HTMLDivElement>(null);
-    const [map, setMap] = React.useState(null);
+    const itemsOfInterest = ['park', 'beach', 'gift', 'casino', 'museum'];
 
-    const collectPlacesOfInterest = () => {
-        GetPlacesOfInterest(location?.latitude, location?.longitude).then((res) => {
-            setPlaceData(res);
-        });
+    const collectPlacesOfInterest = async () => {
+        const collectedPlacesOfInterest: Features[] = [];
+        try {
+            await Promise.all(
+                itemsOfInterest.map(async (item) => {
+                    await GetPlacesOfInterest(item, location?.latitude, location?.longitude).then((result) => {
+                        result.features.forEach((interest: Features) => {
+                            console.log(interest);
+                            collectedPlacesOfInterest.push(interest);
+                        });
+                    });
+                }),
+            ).then(() => {
+                setPlaceData(collectedPlacesOfInterest);
+            });
+        } catch {
+            console.error(`Couldn't load data to populate map.`);
+        }
     };
 
     React.useEffect(() => {
@@ -30,35 +44,30 @@ const LocationMap = ({ location }: { location: Coordinates | undefined }): JSX.E
     }, [location]);
 
     React.useEffect(() => {
-        const attachMap = (
-            setMap: React.Dispatch<React.SetStateAction<any>>,
-            mapDiv: React.RefObject<HTMLDivElement>,
-        ) => {
-            if (!mapDiv.current) {
-                return;
-            }
-            if (location && placeData) {
-                const map = new mapboxgl.Map({
-                    container: mapDiv.current || '',
-                    style: 'mapbox://styles/mapbox/outdoors-v11',
-                    center: [location?.longitude, location?.latitude],
-                    zoom: 10,
-                });
-
-                placeData?.features.map((element) => {
+        let map: mapboxgl.Map;
+        if (location?.longitude && location?.latitude) {
+            map = new mapboxgl.Map({
+                container: mapDiv.current || '',
+                style: 'mapbox://styles/mapbox/streets-v11',
+                center: [location.longitude, location.latitude],
+                zoom: 12,
+            });
+            const bounds = new mapboxgl.LngLatBounds();
+            if (placeData) {
+                placeData.map((element) => {
+                    const popup = new mapboxgl.Popup({ offset: 25 }).setText(`${element.text}`);
+                    bounds.extend([element.geometry.coordinates[0], element.geometry.coordinates[1]]);
                     new mapboxgl.Marker({
                         color: '#FFFFFF',
                     })
                         .setLngLat([element.geometry.coordinates[0], element.geometry.coordinates[1]])
+                        .setPopup(popup)
                         .addTo(map);
                 });
-
-                setMap(map);
+                map.fitBounds(bounds, { padding: 50 });
             }
-        };
-
-        !map && attachMap(setMap, mapDiv);
-    }, [map, location, placeData]);
+        }
+    }, [location, placeData]);
 
     return (
         <MapContainer maxWidth="md">

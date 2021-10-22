@@ -2,7 +2,7 @@ import React from 'react';
 import './App.scss';
 
 import styled from 'styled-components';
-import { Container, Box, Card, Typography } from '@mui/material';
+import { Container, Card, Typography } from '@mui/material';
 
 import SearchBar from './components/Search';
 import Weather from './components/Weather';
@@ -25,29 +25,6 @@ const App = (): JSX.Element => {
                             <Weather location={location} />
                             <Map location={location} />
                         </CityCard>
-                    </Container>
-                    <Container>
-                        <Box
-                            maxWidth="md"
-                            sx={{
-                                display: 'flex',
-                                flexDirection: 'row',
-                                justifyContent: 'space-evenly',
-                                alignContent: 'center',
-                                p: 1,
-                                m: 1,
-                            }}
-                        >
-                            <MiniCard sx={{ minWidth: 250 }}>
-                                <MiniTitle variant="h2">Surrey, BC</MiniTitle>
-                            </MiniCard>
-                            <MiniCard sx={{ minWidth: 250 }}>
-                                <MiniTitle variant="h2">Victoria, BC</MiniTitle>
-                            </MiniCard>
-                            <MiniCard sx={{ minWidth: 250 }}>
-                                <MiniTitle variant="h2">Burnaby, BC</MiniTitle>
-                            </MiniCard>
-                        </Box>
                     </Container>
                 </>
             )}

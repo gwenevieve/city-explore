@@ -6,6 +6,7 @@ import { Container } from '@mui/material';
 import { Coordinates } from '../models/coordinates';
 
 import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
+import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
 
 const SearchBar = ({
     setLocation,
