@@ -3,6 +3,8 @@ import styled from 'styled-components';
 
 import { Container } from '@mui/material';
 
+import { Haversine } from '../utilities/Haversine';
+
 import { Coordinates } from '../models/coordinates';
 import { Features } from '../models/placesOfInterest';
 
@@ -24,8 +26,20 @@ const LocationMap = ({ location }: { location: Coordinates | undefined }): JSX.E
                 itemsOfInterest.map(async (item) => {
                     await GetPlacesOfInterest(item, location?.latitude, location?.longitude).then((result) => {
                         result.features.forEach((interest: Features) => {
-                            console.log(interest);
-                            collectedPlacesOfInterest.push(interest);
+                            if (location?.latitude && location?.longitude) {
+                                if (
+                                    Math.floor(
+                                        Haversine(
+                                            location?.latitude,
+                                            location?.longitude,
+                                            interest.geometry.coordinates[1],
+                                            interest.geometry.coordinates[0],
+                                        ),
+                                    ) < 25
+                                ) {
+                                    collectedPlacesOfInterest.push(interest);
+                                }
+                            }
                         });
                     });
                 }),
@@ -38,7 +52,7 @@ const LocationMap = ({ location }: { location: Coordinates | undefined }): JSX.E
     };
 
     React.useEffect(() => {
-        if (location?.latitude) {
+        if (location?.latitude && location?.longitude) {
             collectPlacesOfInterest();
         }
     }, [location]);
