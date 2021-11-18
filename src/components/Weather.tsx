@@ -15,12 +15,19 @@ const Weather = ({ location }: { location?: Coordinates }): JSX.Element => {
     const [currentTemp, setCurrentTemp] = React.useState<number>();
     const [currentWeatherIcon, setCurrentWeatherIcon] = React.useState<string>();
 
+    function convertToDay(date: number) {
+        const convertedDate = new Date(date * 1000);
+        const allDays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+        const dayName = allDays[convertedDate.getDay()];
+        return dayName;
+    }
+
     const collectOpenWeatherData = () => {
         GetWeather(location?.latitude, location?.longitude).then((res) => {
             setWeatherData(res);
         });
     };
-
+    //
     React.useEffect(() => {
         if (location?.latitude) {
             collectOpenWeatherData();
@@ -31,6 +38,7 @@ const Weather = ({ location }: { location?: Coordinates }): JSX.Element => {
         if (weatherData) {
             setCurrentTemp(weatherData?.current.temp);
             setCurrentWeatherIcon(weatherData?.current?.weather[0].main);
+            weatherData?.daily.splice(7, 1);
         }
     }, [weatherData]);
 
@@ -42,7 +50,11 @@ const Weather = ({ location }: { location?: Coordinates }): JSX.Element => {
             </CurrentConditions>
             <UpcomingWeather direction="row" spacing={1}>
                 {weatherData?.daily.map((element, index) => {
-                    return <Typography key={index}>Temp: {element.temp.day}</Typography>;
+                    return (
+                        <Typography key={index}>
+                            {convertToDay(element.dt)} {`${Math.round(element.temp.day)}°C`}
+                        </Typography>
+                    );
                 })}
             </UpcomingWeather>
         </WeatherContainer>
