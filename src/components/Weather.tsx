@@ -8,6 +8,8 @@ import Icon from '../components/WeatherIcon';
 import { Coordinates } from '../models/coordinates';
 import { WeatherFields } from '../models/weather';
 
+import { ConvertToDay } from '../utilities/ConvertDate';
+
 import { GetWeather } from '../queries/OpenWeather';
 
 const Weather = ({ location }: { location?: Coordinates }): JSX.Element => {
@@ -15,19 +17,12 @@ const Weather = ({ location }: { location?: Coordinates }): JSX.Element => {
     const [currentTemp, setCurrentTemp] = React.useState<number>();
     const [currentWeatherIcon, setCurrentWeatherIcon] = React.useState<string>();
 
-    function convertToDay(date: number) {
-        const convertedDate = new Date(date * 1000);
-        const allDays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-        const dayName = allDays[convertedDate.getDay()];
-        return dayName;
-    }
-
     const collectOpenWeatherData = () => {
         GetWeather(location?.latitude, location?.longitude).then((res) => {
             setWeatherData(res);
         });
     };
-    //
+
     React.useEffect(() => {
         if (location?.latitude) {
             collectOpenWeatherData();
@@ -52,7 +47,7 @@ const Weather = ({ location }: { location?: Coordinates }): JSX.Element => {
                 {weatherData?.daily.map((element, index) => {
                     return (
                         <Typography key={index}>
-                            {convertToDay(element.dt)} {`${Math.round(element.temp.day)}°C`}
+                            {ConvertToDay(element.dt)} {`${Math.round(element.temp.day)}°C`}
                         </Typography>
                     );
                 })}
