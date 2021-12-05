@@ -3,14 +3,14 @@ import styled from 'styled-components';
 
 import { Container, Stack, Typography } from '@mui/material';
 
-import Icon from '../components/WeatherIcon';
+import Icon from './WeatherIcon';
 
-import { Coordinates } from '../models/coordinates';
-import { WeatherFields } from '../models/weather';
+import { Coordinates } from '../../models/coordinates';
+import { WeatherFields } from '../../models/weather';
 
-import { ConvertToDay } from '../utilities/ConvertDate';
+import { ConvertToDay } from '../../utilities/ConvertDate';
 
-import { GetWeather } from '../queries/OpenWeather';
+import { GetWeather } from '../../queries/OpenWeather';
 
 const Weather = ({ location }: { location?: Coordinates }): JSX.Element => {
     const [weatherData, setWeatherData] = React.useState<WeatherFields>();
@@ -38,15 +38,15 @@ const Weather = ({ location }: { location?: Coordinates }): JSX.Element => {
     }, [weatherData]);
 
     return (
-        <WeatherContainer>
+        <WeatherContainer disableGutters>
             <CurrentConditions direction="row" spacing={2}>
                 <Icon image={currentWeatherIcon} />
-                <Typography>{`${currentTemp}°C`}</Typography>
+                <Typography>{`${currentTemp ? Math.round(currentTemp) : ''}°C`}</Typography>
             </CurrentConditions>
             <UpcomingWeather direction="row" spacing={1}>
                 {weatherData?.daily.map((element, index) => {
                     return (
-                        <Typography key={index}>
+                        <Typography variant="body1" key={index}>
                             {ConvertToDay(element.dt)} {`${Math.round(element.temp.day)}°C`}
                         </Typography>
                     );

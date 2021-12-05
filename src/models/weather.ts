@@ -1,8 +1,15 @@
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
+
 export interface WeatherDetails {
     description: string;
     icon: string;
     id: number;
     main: string;
+}
+
+export interface WeatherIconDetails {
+    icon: IconProp;
+    color: string;
 }
 
 export interface WeatherFields {

@@ -2,33 +2,36 @@ import React from 'react';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBolt, faCloud, faCloudRain, faSun, faSnowflake, faSmog } from '@fortawesome/free-solid-svg-icons';
-import { IconProp } from '@fortawesome/fontawesome-svg-core';
+
+import { WeatherIconDetails } from '../../models/weather';
 
 const WeatherIcon = ({ image }: { image: string | undefined }): JSX.Element => {
-    const [weatherImage, setWeatherImage] = React.useState<IconProp>();
+    const [weatherImage, setWeatherImage] = React.useState<WeatherIconDetails>();
     React.useEffect(() => {
         switch (image) {
             case 'Thunderstorm':
-                setWeatherImage(faBolt);
+                setWeatherImage({ icon: faBolt, color: '#FF8969' });
                 break;
             case 'Clouds' || 'Scattered Clouds' || 'Broken Clouds' || 'Few Clouds':
-                setWeatherImage(faCloud);
+                setWeatherImage({ icon: faCloud, color: '#FF8969' });
                 break;
             case 'Rain' || 'Shower Rain':
-                setWeatherImage(faCloudRain);
+                setWeatherImage({ icon: faCloudRain, color: '#FF8969' });
                 break;
             case 'Clear':
-                setWeatherImage(faSun);
+                setWeatherImage({ icon: faSun, color: '#FF8969' });
                 break;
             case 'Snow':
-                setWeatherImage(faSnowflake);
+                setWeatherImage({ icon: faSnowflake, color: '#FF8969' });
                 break;
             case 'Mist':
-                setWeatherImage(faSmog);
+                setWeatherImage({ icon: faSmog, color: '#FF8969' });
                 break;
         }
     }, [image]);
-    return <>{weatherImage ? <FontAwesomeIcon icon={weatherImage} /> : null}</>;
+    return (
+        <>{weatherImage ? <FontAwesomeIcon size="2x" color={weatherImage.color} icon={weatherImage.icon} /> : null}</>
+    );
 };
 
 export default WeatherIcon;
