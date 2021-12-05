@@ -72,7 +72,7 @@ const LocationMap = ({ location }: { location: Coordinates | undefined }): JSX.E
                     const popup = new mapboxgl.Popup({ offset: 25 }).setText(`${element.text}`);
                     bounds.extend([element.geometry.coordinates[0], element.geometry.coordinates[1]]);
                     new mapboxgl.Marker({
-                        color: '#FFFFFF',
+                        color: '#FF8969',
                     })
                         .setLngLat([element.geometry.coordinates[0], element.geometry.coordinates[1]])
                         .setPopup(popup)
@@ -84,7 +84,7 @@ const LocationMap = ({ location }: { location: Coordinates | undefined }): JSX.E
     }, [location, placeData]);
 
     return (
-        <MapContainer maxWidth="md">
+        <MapContainer disableGutters maxWidth="md">
             <MapRender ref={mapDiv} />
         </MapContainer>
     );
@@ -93,6 +93,7 @@ const LocationMap = ({ location }: { location: Coordinates | undefined }): JSX.E
 const MapContainer = styled(Container)`
     position: relative;
     min-height: 45rem;
+    padding: 0;
 `;
 
 const MapRender = styled(Container)`
