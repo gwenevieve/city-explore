@@ -79,6 +79,7 @@ const MiniTitle = styled(Typography)``;
 const Footer = styled.div<{ isResultLoaded: boolean | undefined }>`
     position: ${(props) => (props.isResultLoaded ? 'initial' : 'absolute')};
     bottom: 1em;
+    padding-bottom: ${(props) => (props.isResultLoaded ? '1em' : '0')};
     display: flex;
     justify-content: center;
     width: 100%;
