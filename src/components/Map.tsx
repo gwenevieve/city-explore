@@ -62,12 +62,12 @@ const LocationMap = ({ location }: { location: Coordinates | undefined }): JSX.E
         if (location?.longitude && location?.latitude) {
             map = new mapboxgl.Map({
                 container: mapDiv.current || '',
-                style: 'mapbox://styles/mapbox/streets-v11',
+                style: 'mapbox://styles/gwenevieve/ckx3wofeu0i0v14mzhe8pjyr3',
                 center: [location.longitude, location.latitude],
                 zoom: 12,
             });
             const bounds = new mapboxgl.LngLatBounds();
-            if (placeData) {
+            if (placeData && placeData.length >= 1) {
                 placeData.map((element) => {
                     const popup = new mapboxgl.Popup({ offset: 25 }).setText(`${element.text}`);
                     bounds.extend([element.geometry.coordinates[0], element.geometry.coordinates[1]]);
