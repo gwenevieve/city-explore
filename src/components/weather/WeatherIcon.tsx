@@ -1,11 +1,12 @@
 import React from 'react';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { SizeProp } from '@fortawesome/fontawesome-svg-core';
 import { faBolt, faCloud, faCloudRain, faSun, faSnowflake, faSmog } from '@fortawesome/free-solid-svg-icons';
 
 import { WeatherIconDetails } from '../../models/weather';
 
-const WeatherIcon = ({ image }: { image: string | undefined }): JSX.Element => {
+const WeatherIcon = ({ image, size }: { image: string | undefined; size: SizeProp }): JSX.Element => {
     const [weatherImage, setWeatherImage] = React.useState<WeatherIconDetails>();
     React.useEffect(() => {
         switch (image) {
@@ -30,7 +31,7 @@ const WeatherIcon = ({ image }: { image: string | undefined }): JSX.Element => {
         }
     }, [image]);
     return (
-        <>{weatherImage ? <FontAwesomeIcon size="2x" color={weatherImage.color} icon={weatherImage.icon} /> : null}</>
+        <>{weatherImage ? <FontAwesomeIcon size={size} color={weatherImage.color} icon={weatherImage.icon} /> : null}</>
     );
 };
 

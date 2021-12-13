@@ -1,5 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { useTheme } from '@mui/material/styles';
 
 import { Container, Stack, Typography } from '@mui/material';
 
@@ -16,6 +18,9 @@ const Weather = ({ location }: { location?: Coordinates }): JSX.Element => {
     const [weatherData, setWeatherData] = React.useState<WeatherFields>();
     const [currentTemp, setCurrentTemp] = React.useState<number>();
     const [currentWeatherIcon, setCurrentWeatherIcon] = React.useState<string>();
+
+    const theme = useTheme();
+    const matches = useMediaQuery(theme.breakpoints.down('sm'));
 
     const collectOpenWeatherData = () => {
         GetWeather(location?.latitude, location?.longitude).then((res) => {
@@ -39,16 +44,20 @@ const Weather = ({ location }: { location?: Coordinates }): JSX.Element => {
 
     return (
         <WeatherContainer disableGutters>
-            <CurrentConditions direction="row" spacing={2}>
-                <Icon image={currentWeatherIcon} />
+            <CurrentConditions direction="row" mt={2} mb={2} spacing={2}>
+                <Icon size="2x" image={currentWeatherIcon} />
                 <Typography>{`${currentTemp ? Math.round(currentTemp) : ''}°C`}</Typography>
             </CurrentConditions>
             <UpcomingWeather direction="row" spacing={1}>
-                {weatherData?.daily.map((element, index) => {
+                {weatherData?.daily.map((element) => {
                     return (
-                        <Typography variant="body1" key={index}>
-                            {ConvertToDay(element.dt)} {`${Math.round(element.temp.day)}°C`}
-                        </Typography>
+                        <UpcomingDate key={element.dt}>
+                            <Typography mb={1} variant="body1">
+                                {`${matches ? ConvertToDay(element.dt).substring(0, 3) : ConvertToDay(element.dt)}`}
+                            </Typography>
+                            <Icon size="1x" image={element?.weather[0].main} />
+                            <Typography mt={1} variant="body1">{`${Math.round(element.temp.day)}°C`}</Typography>
+                        </UpcomingDate>
                     );
                 })}
             </UpcomingWeather>
@@ -60,6 +69,26 @@ const WeatherContainer = styled(Container)``;
 
 const CurrentConditions = styled(Stack)``;
 
-const UpcomingWeather = styled(Stack)``;
+const UpcomingWeather = styled(Stack)`
+    display: flex;
+    gap: 16px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+`;
+
+const UpcomingDate = styled.div`
+    scroll-snap-align: start;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 30px;
+`;
 
 export default Weather;
