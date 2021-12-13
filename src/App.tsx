@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
 
-import { Container, Card, Typography } from '@mui/material';
+import { Box, Container, Card, Typography } from '@mui/material';
 
 import SearchBar from './components/Search';
 import Weather from './components/weather/Weather';
@@ -18,28 +18,36 @@ import background from './images/background.png';
 const App = (): JSX.Element => {
     const [location, setLocation] = React.useState<Coordinates | undefined>(undefined);
     const [locationName, setLocationName] = React.useState<string | undefined>();
+    const [isResultLoaded, setIsResultLoaded] = React.useState<boolean | undefined>(false);
 
     const theme = useTheme();
     const matches = useMediaQuery(theme.breakpoints.up('sm'));
 
     return (
         <AppContainer>
-            {`theme.breakpoints.up('sm') matches: ${matches}`}
-            <SearchBar setLocation={setLocation} setLocationName={setLocationName} />
+            <SearchBar
+                setIsResultLoaded={setIsResultLoaded}
+                isResultLoaded={isResultLoaded}
+                setLocation={setLocation}
+                setLocationName={setLocationName}
+            />
             {location && (
                 <>
-                    <Container maxWidth="md">
-                        <CityCard>
+                    <AppInnerContainer maxWidth="md">
+                        <CityCard elevation={0}>
                             <Banner />
-                            <CityDetails>
+                            <CityDetails padding={2}>
                                 <Title variant="h1">{locationName}</Title>
                                 <Weather location={location} />
                             </CityDetails>
                             <Map location={location} />
                         </CityCard>
-                    </Container>
+                    </AppInnerContainer>
                 </>
             )}
+            <Footer isResultLoaded={isResultLoaded}>
+                <Typography variant="body1">Copyright {new Date().getFullYear()} Marie Sarah Felton</Typography>
+            </Footer>
         </AppContainer>
     );
 };
@@ -52,11 +60,13 @@ const AppContainer = styled.main`
     background-size: cover;
 `;
 
+const AppInnerContainer = styled(Container)`
+    padding-bottom: 1em;
+`;
+
 const CityCard = styled(Card)``;
 
-const CityDetails = styled.div`
-    padding: 20px;
-`;
+const CityDetails = styled(Box)``;
 
 const MiniCard = styled(Card)``;
 
@@ -65,5 +75,13 @@ const Banner = styled.div``;
 const Title = styled(Typography)``;
 
 const MiniTitle = styled(Typography)``;
+
+const Footer = styled.div<{ isResultLoaded: boolean | undefined }>`
+    position: ${(props) => (props.isResultLoaded ? 'initial' : 'absolute')};
+    bottom: 1em;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+`;
 
 export default App;
