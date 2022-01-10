@@ -20,8 +20,17 @@ const SearchBar = ({
     isResultLoaded?: boolean | undefined;
 }): JSX.Element => {
     const inputValue = document.getElementsByClassName('mapboxgl-ctrl-geocoder--input')[0] as HTMLInputElement;
+    const [resultDropdown, setResultDropdown] = React.useState<boolean>(false);
+    const [resultsFetched, setResultsFetched] = React.useState<boolean>(false);
 
     console.log(inputValue);
+
+    const cities = ['toronto', 'montreal', 'victoria'];
+
+    React.useEffect(() => {
+        if (!isResultLoaded) {
+        }
+    }, [isResultLoaded]);
 
     const Geocoder = new MapboxGeocoder({
         accessToken: `${process.env.REACT_APP_MAPBOX}`,
@@ -31,11 +40,23 @@ const SearchBar = ({
         countries: 'ca',
     });
 
+    Geocoder.on('results', function () {
+        setResultDropdown(true);
+        setResultsFetched(true);
+    });
+
+    function checkFetchedResults() {
+        if (resultsFetched) {
+            setResultDropdown(true);
+        }
+    }
+
     React.useEffect(() => {
         Geocoder.addTo('#geocoder-container');
     }, []);
 
     Geocoder.on('result', function (e) {
+        setResultDropdown(false);
         if (e && e.result) {
             setLocation({
                 latitude: e.result.geometry.coordinates[1],
@@ -53,12 +74,21 @@ const SearchBar = ({
         }
     });
 
+    Geocoder.on('clear', function () {
+        setResultsFetched(false);
+    });
+
     return (
         <SearchContainer maxWidth="sm">
             <GeocodeSearch
                 isResultLoaded={isResultLoaded}
+                resultDropdown={resultDropdown}
+                onBlur={() => {
+                    setResultDropdown(false);
+                }}
+                onClick={() => checkFetchedResults()}
                 p={2}
-                onKeyDown={(event: React.KeyboardEvent) => {
+                onKeyDown={(event: React.KeyboardEvent<HTMLInputElement>) => {
                     if (event.keyCode === 13) {
                         event.preventDefault();
                     }
@@ -71,25 +101,28 @@ const SearchBar = ({
 
 const SearchContainer = styled(Box)``;
 
-const GeocodeSearch = styled(Box)<{ isResultLoaded: boolean | undefined }>`
+const GeocodeSearch = styled(Box)<{ isResultLoaded: boolean | undefined; resultDropdown: boolean | undefined }>`
     position: ${(props) => (props.isResultLoaded ? 'initial' : 'absolute')};
     top: 25%;
     left: 0;
     right: 0;
     .mapboxgl-ctrl {
         margin: 0 auto;
+        border-radius: 4px;
         max-width: 500px;
+        border-bottom-left-radius: ${(props) => (props.resultDropdown ? '0' : '4px')};
+        border-bottom-right-radius: ${(props) => (props.resultDropdown ? '0' : '4px')};
         @media screen and (min-width: 600px) {
             width: 100%;
         }
         .suggestions {
-            border-top-left-radius: 0;
-            border-top-right-radius: 0;
+            border-top-left-radius: ${(props) => (props.resultDropdown ? '0' : '4px')};
+            border-top-right-radius: ${(props) => (props.resultDropdown ? '0' : '4px')};
             border-top: 1px solid #f3f3f3;
             top: calc(100%);
             box-shadow: 0 1px 2px rgba(255, 137, 105, 0.07), 0 2px 4px rgba(255, 137, 105, 0.07),
                 0 4px 8px rgba(255, 137, 105, 0.07), 0 8px 16px rgba(255, 137, 105, 0.07),
-                0 16px 32px rgba(255, 137, 105, 0.07), 0 32px 64px rgba(255, 137, 105, 0.07);
+                0 16px 32px rgba(105, 193, 255, 0.07), 0 32px 64px rgba(255, 137, 105, 0.07);
         }
         &-geocoder {
             box-shadow: none;
@@ -112,6 +145,8 @@ const GeocodeSearch = styled(Box)<{ isResultLoaded: boolean | undefined }>`
                 text-overflow: ellipsis;
                 white-space: nowrap;
                 overflow: hidden;
+                border-bottom-left-radius: ${(props) => (props.resultDropdown ? '0' : '4px')};
+                border-bottom-right-radius: ${(props) => (props.resultDropdown ? '0' : '4px')};
                 @media screen and (min-width: 600px) {
                     height: 70px;
                     color: #2a2a2a;
@@ -120,6 +155,9 @@ const GeocodeSearch = styled(Box)<{ isResultLoaded: boolean | undefined }>`
                 }
                 &:focus {
                     outline: none;
+                    border-radius: 4px;
+                    border-bottom-left-radius: ${(props) => (props.resultDropdown ? '0' : '4px')};
+                    border-bottom-right-radius: ${(props) => (props.resultDropdown ? '0' : '4px')};
                     box-shadow: 0 1px 2px rgba(255, 137, 105, 0.07), 0 2px 4px rgba(255, 137, 105, 0.07),
                         0 4px 8px rgba(255, 137, 105, 0.07), 0 8px 16px rgba(255, 137, 105, 0.07),
                         0 16px 32px rgba(255, 137, 105, 0.07), 0 32px 64px rgba(255, 137, 105, 0.07);
