@@ -24,7 +24,7 @@ const App = (): JSX.Element => {
     const matches = useMediaQuery(theme.breakpoints.up('sm'));
 
     return (
-        <AppContainer>
+        <AppContainer isResultLoaded={isResultLoaded}>
             <SearchBar
                 setIsResultLoaded={setIsResultLoaded}
                 isResultLoaded={isResultLoaded}
@@ -46,14 +46,14 @@ const App = (): JSX.Element => {
                 </>
             )}
             <Footer isResultLoaded={isResultLoaded}>
-                <Typography variant="body1">Copyright {new Date().getFullYear()} Marie Sarah Felton</Typography>
+                <Typography variant="body2">Copyright {new Date().getFullYear()} Marie Sarah Felton</Typography>
             </Footer>
         </AppContainer>
     );
 };
 
-const AppContainer = styled.main`
-    height: 100vh;
+const AppContainer = styled.main<{ isResultLoaded: boolean | undefined }>`
+    height: ${(props) => (props.isResultLoaded ? '100%' : '100vh')};
     background-image: url(${background});
     background-color: #f9f2eb;
     background-repeat: no-repeat;

@@ -16,6 +16,10 @@ const theme = createTheme({
             },
         },
         body1: {
+            fontSize: '1.4em',
+            color: '#2a2a2a',
+        },
+        body2: {
             fontSize: '0.8em',
             color: '#2a2a2a',
         },
