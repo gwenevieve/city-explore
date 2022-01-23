@@ -4,23 +4,24 @@ import createBreakpoints from '@mui/system/createTheme/createBreakpoints';
 const breakpoints = createBreakpoints({});
 const theme = createTheme({
     typography: {
+        htmlFontSize: 10,
         h1: {
             fontFamily: "'Newsreader', serif",
             fontVariationSettings: "'wght' 700",
             letterSpacing: 1,
             color: '#2a2a2a',
-            fontSize: '1.8em',
+            fontSize: '2.8rem',
             [breakpoints.up('md')]: {
-                fontSize: '3.4em',
+                fontSize: '4.4rem',
                 letterSpacing: 2,
             },
         },
         body1: {
-            fontSize: '1.4em',
+            fontSize: '2.4rem',
             color: '#2a2a2a',
         },
         body2: {
-            fontSize: '0.8em',
+            fontSize: '1.6rem',
             color: '#2a2a2a',
         },
     },

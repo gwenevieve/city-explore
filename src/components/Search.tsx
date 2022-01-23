@@ -79,7 +79,7 @@ const SearchBar = ({
     });
 
     return (
-        <SearchContainer maxWidth="sm">
+        <SearchContainer maxWidth="sm" m="auto">
             <GeocodeSearch
                 isResultLoaded={isResultLoaded}
                 resultDropdown={resultDropdown}
