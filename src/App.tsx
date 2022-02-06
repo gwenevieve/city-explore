@@ -4,11 +4,11 @@ import './App.scss';
 import styled from 'styled-components';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
-import { ThemeProvider } from '@mui/material';
 
 import { Box, Container, Card, Typography } from '@mui/material';
 
 import SearchBar from './components/Search';
+import Banner from './components/Banner';
 import Weather from './components/weather/Weather';
 import Map from './components/Map';
 
@@ -18,40 +18,38 @@ import background from './images/background.png';
 
 const App = (): JSX.Element => {
     const [location, setLocation] = React.useState<Coordinates | undefined>(undefined);
-    const [locationName, setLocationName] = React.useState<string | undefined>();
-    const [isResultLoaded, setIsResultLoaded] = React.useState<boolean | undefined>(false);
+    const [locationName, setLocationName] = React.useState<string>('');
+    const [isResultLoaded, setIsResultLoaded] = React.useState<boolean>(false);
 
     const theme = useTheme();
     const matches = useMediaQuery(theme.breakpoints.up('sm'));
 
     return (
-        <ThemeProvider theme={theme}>
-            <AppContainer isResultLoaded={isResultLoaded}>
-                <SearchBar
-                    setIsResultLoaded={setIsResultLoaded}
-                    isResultLoaded={isResultLoaded}
-                    setLocation={setLocation}
-                    setLocationName={setLocationName}
-                />
-                {location && (
-                    <>
-                        <AppInnerContainer maxWidth="md">
-                            <CityCard elevation={0}>
-                                <Banner />
-                                <CityDetails padding={2}>
-                                    <Title variant="h1">{locationName}</Title>
-                                    <Weather location={location} />
-                                </CityDetails>
-                                <Map location={location} />
-                            </CityCard>
-                        </AppInnerContainer>
-                    </>
-                )}
-                <Footer isResultLoaded={isResultLoaded}>
-                    <Typography variant="body2">Copyright {new Date().getFullYear()} Marie Sarah Felton</Typography>
-                </Footer>
-            </AppContainer>
-        </ThemeProvider>
+        <AppContainer isResultLoaded={isResultLoaded}>
+            <SearchBar
+                setIsResultLoaded={setIsResultLoaded}
+                isResultLoaded={isResultLoaded}
+                setLocation={setLocation}
+                setLocationName={setLocationName}
+            />
+            {location && (
+                <>
+                    <AppInnerContainer maxWidth="md">
+                        <CityCard elevation={0}>
+                            <Banner locationName={locationName} />
+                            <CityDetails padding={2}>
+                                <Title variant="h1">{locationName}</Title>
+                                <Weather location={location} />
+                            </CityDetails>
+                            <Map location={location} />
+                        </CityCard>
+                    </AppInnerContainer>
+                </>
+            )}
+            <Footer isResultLoaded={isResultLoaded}>
+                <Typography variant="body2">Copyright {new Date().getFullYear()} Marie Sarah Felton</Typography>
+            </Footer>
+        </AppContainer>
     );
 };
 
@@ -72,8 +70,6 @@ const CityCard = styled(Card)``;
 const CityDetails = styled(Box)``;
 
 const MiniCard = styled(Card)``;
-
-const Banner = styled.div``;
 
 const Title = styled(Typography)``;
 

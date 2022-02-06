@@ -93,7 +93,6 @@ const LocationMap = ({ location }: { location: Coordinates | undefined }): JSX.E
 const MapContainer = styled(Container)`
     position: relative;
     min-height: 45rem;
-    padding: 0;
 `;
 
 const MapRender = styled(Container)`

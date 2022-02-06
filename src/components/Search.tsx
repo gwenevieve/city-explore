@@ -15,15 +15,15 @@ const SearchBar = ({
     isResultLoaded,
 }: {
     setLocation: React.Dispatch<React.SetStateAction<Coordinates | undefined>>;
-    setLocationName: React.Dispatch<React.SetStateAction<string | undefined>>;
-    setIsResultLoaded: React.Dispatch<React.SetStateAction<boolean | undefined>>;
-    isResultLoaded?: boolean | undefined;
+    setLocationName: React.Dispatch<React.SetStateAction<string>>;
+    setIsResultLoaded: React.Dispatch<React.SetStateAction<boolean>>;
+    isResultLoaded?: boolean;
 }): JSX.Element => {
     const inputValue = document.getElementsByClassName('mapboxgl-ctrl-geocoder--input')[0] as HTMLInputElement;
     const [resultDropdown, setResultDropdown] = React.useState<boolean>(false);
     const [resultsFetched, setResultsFetched] = React.useState<boolean>(false);
 
-    console.log(inputValue);
+    // console.log(inputValue);
 
     const cities = ['toronto', 'montreal', 'victoria'];
 
