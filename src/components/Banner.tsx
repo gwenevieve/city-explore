@@ -74,22 +74,26 @@ const Banner = ({ locationName }: { locationName: string }): JSX.Element => {
                             />
                         );
                     })}
-                <NavArrowLeft>
-                    <FontAwesomeIcon
-                        onClick={() => updateCarousel(-1)}
-                        color="#ffffffe0"
-                        size="2x"
-                        icon={faChevronCircleLeft}
-                    />
-                </NavArrowLeft>
-                <NavArrowRight>
-                    <FontAwesomeIcon
-                        onClick={() => updateCarousel(1)}
-                        color="#ffffffe0"
-                        size="2x"
-                        icon={faChevronCircleRight}
-                    />
-                </NavArrowRight>
+                {carousel.totalSlides > 1 && (
+                    <CarouselNavigation>
+                        <NavArrowLeft>
+                            <FontAwesomeIcon
+                                onClick={() => updateCarousel(-1)}
+                                color="#ffffffe0"
+                                size="2x"
+                                icon={faChevronCircleLeft}
+                            />
+                        </NavArrowLeft>
+                        <NavArrowRight>
+                            <FontAwesomeIcon
+                                onClick={() => updateCarousel(1)}
+                                color="#ffffffe0"
+                                size="2x"
+                                icon={faChevronCircleRight}
+                            />
+                        </NavArrowRight>
+                    </CarouselNavigation>
+                )}
             </CarouselContainer>
         </BannerContainer>
     );
@@ -133,6 +137,8 @@ const CarouselSlide = styled.img<{
     animation-name: ${fadeAnimation};
     animation-duration: 1.5s;
 `;
+
+const CarouselNavigation = styled(Box)``;
 
 const NavArrowLeft = styled.button`
     position: absolute;
