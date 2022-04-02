@@ -4,7 +4,7 @@ import { createClient } from 'pexels';
 
 const client = createClient(`${process.env.REACT_APP_PEXELS}`);
 
-const useGetPexelsPhotoa = (query: string): { photoData: any | undefined; isLoading: boolean } => {
+const useGetPexelsPhotos = (query: string): { photoData: any | undefined; isLoading: boolean } => {
     const [photoData, setPhotoData] = React.useState<any>();
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
