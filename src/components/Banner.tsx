@@ -1,9 +1,8 @@
 import React from 'react';
 import styled, { keyframes } from 'styled-components';
 
-import { Photos } from 'pexels';
 import { Photo } from 'pexels';
-import { GetBannerPhotos } from '../queries/Pexels';
+import { useGetPexelsPhotos } from '../hooks/useGetPexelsPhotos';
 
 import { Container } from '@mui/material';
 import { Box } from '@mui/system';
@@ -14,7 +13,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronCircleLeft, faChevronCircleRight } from '@fortawesome/free-solid-svg-icons';
 
 const Banner = ({ locationName }: { locationName: string }): JSX.Element => {
-    const [photos, setPhotos] = React.useState<Photo[]>();
+    const { photoData, isLoading } = useGetPexelsPhotos(locationName.substring(0, locationName.indexOf(',')));
     const [carousel, setCarousel] = React.useState<Carousel>({
         currentSlide: 0,
         totalSlides: 0,
@@ -22,29 +21,14 @@ const Banner = ({ locationName }: { locationName: string }): JSX.Element => {
     });
 
     React.useEffect(() => {
-        if (locationName) {
-            GetBannerPhotos(locationName.substring(0, locationName.indexOf(','))).then((data: Photos) => {
-                if (data.photos.length !== 0) {
-                    setPhotos(data.photos);
-                } else {
-                    setCarousel({
-                        ...carousel,
-                        loaded: false,
-                    });
-                }
-            });
-        }
-    }, [locationName]);
-
-    React.useEffect(() => {
-        if (photos) {
+        if (photoData && !isLoading) {
             setCarousel({
                 ...carousel,
-                totalSlides: photos?.length,
+                totalSlides: photoData?.photos.length,
                 loaded: true,
             });
         }
-    }, [photos]);
+    }, [photoData, isLoading]);
 
     function updateCarousel(position: number) {
         setCarousel({
@@ -59,8 +43,9 @@ const Banner = ({ locationName }: { locationName: string }): JSX.Element => {
     return (
         <BannerContainer loaded={carousel.loaded} disableGutters maxWidth="md">
             <CarouselContainer>
-                {photos &&
-                    photos?.map((image: Photo, index: number) => {
+                {photoData?.photos &&
+                    !isLoading &&
+                    photoData?.photos?.map((image: Photo, index: number) => {
                         return (
                             <CarouselSlide
                                 key={image.id}
