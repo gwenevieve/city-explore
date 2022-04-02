@@ -8,34 +8,21 @@ import { Container, Stack, Typography } from '@mui/material';
 import Icon from './WeatherIcon';
 
 import { Coordinates } from '../../models/coordinates';
-import { WeatherFields } from '../../models/weather';
 
 import { ConvertToDay } from '../../utilities/ConvertDate';
 
-import { GetWeather } from '../../queries/OpenWeather';
+import { useWeather } from '../../hooks/useWeather';
 
 const Weather = ({ location }: { location?: Coordinates }): JSX.Element => {
-    const [weatherData, setWeatherData] = React.useState<WeatherFields>();
+    const { weatherData, isLoading } = useWeather(location?.latitude, location?.longitude);
     const [currentTemp, setCurrentTemp] = React.useState<number>();
     const [currentWeatherIcon, setCurrentWeatherIcon] = React.useState<string>();
 
     const theme = useTheme();
     const matches = useMediaQuery(theme.breakpoints.down('sm'));
 
-    const collectOpenWeatherData = () => {
-        GetWeather(location?.latitude, location?.longitude).then((res) => {
-            setWeatherData(res);
-        });
-    };
-
     React.useEffect(() => {
-        if (location?.latitude) {
-            collectOpenWeatherData();
-        }
-    }, [location]);
-
-    React.useEffect(() => {
-        if (weatherData) {
+        if (weatherData && !isLoading) {
             setCurrentTemp(weatherData?.current.temp);
             setCurrentWeatherIcon(weatherData?.current?.weather[0].main);
             weatherData?.daily.splice(7, 1);
